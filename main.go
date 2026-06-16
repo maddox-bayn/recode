@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"text/template"
 )
@@ -9,7 +10,7 @@ import (
 func handleEcho(w http.ResponseWriter, r *http.Request) {
 	val := r.FormValue("text")
 	w.Write([]byte(val))
-	fmt.Fprintf(w, val)
+	//fmt.Fprintf(w, val)
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -19,8 +20,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "405 | method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-		fmt.Fprintf(w, "")
-		//tmpl.Execute(w, nil)
+		tmpl.Execute(w, nil)
 	case "/echo":
 		if r.Method != http.MethodPost {
 			http.Error(w, "405 | method not allowed", http.StatusMethodNotAllowed)
@@ -36,11 +36,11 @@ var tmpl *template.Template
 var err error
 
 func main() {
-	// tmpl, err = template.ParseFiles("templates/index.html")
-	// if err != nil {
-	// 	log.Fatal("error", err)
-	// }
-	fmt.Println("http://localhost:8080:")
+	tmpl, err = template.ParseFiles("templates/index.html")
+	if err != nil {
+		log.Fatal("error", err)
+	}
+	fmt.Println("server running on local host http://localhost:8080:")
 	http.HandleFunc("/", Handler)
 	http.ListenAndServe(":8080", nil)
 }
