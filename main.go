@@ -8,6 +8,7 @@ import (
 
 func handleEcho(w http.ResponseWriter, r *http.Request) {
 	val := r.FormValue("text")
+	w.Write([]byte(val))
 	fmt.Fprintf(w, val)
 }
 
